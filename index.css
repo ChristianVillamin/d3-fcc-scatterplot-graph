@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background: lightblue;
+}
+
+.green {
+  color: green;
+  border: 1px green solid;
+  padding: 3px;
+}
+
+.red {
+  color: red;
+  border: 1px red solid;
+  padding: 3px;
+}
+
+#tooltip {
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 5px;
+  border-radius: 10px;
+}
