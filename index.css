@@ -11,21 +11,52 @@ body {
   background: lightblue;
 }
 
-.green {
+#container,
+#title,
+#tooltip,
+#legend {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+#container {
+  left: 50%;
+  top: 50%;
+
+  box-shadow: 0 0 5px gray;
+  background: white;
+}
+
+#title {
+  top: 25px;
+  width: 100%;
+  text-align: center;
+}
+
+#tooltip {
+  pointer-events: none;
+  visibility: hidden;
+
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 5px;
+  border-radius: 10px;
+}
+
+#legend {
+  top: 60px;
+  left: 50%;
+  pointer-events: none;
+}
+
+#green {
   color: green;
   border: 1px green solid;
   padding: 3px;
 }
 
-.red {
+#red {
   color: red;
   border: 1px red solid;
   padding: 3px;
-}
-
-#tooltip {
-  font-size: 12px;
-  background: rgba(0, 0, 0, 0.25);
-  padding: 5px;
-  border-radius: 10px;
 }

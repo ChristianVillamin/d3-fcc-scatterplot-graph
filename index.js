@@ -1,58 +1,42 @@
-d3.json(
-  'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json'
-).then(dataset => {
-  const svgWidth = 1000;
-  const svgHeight = 500;
-  const svgPadding = 60;
-  const svgPaddingTop = 90;
+const dataURL =
+  'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json';
 
-  const container = d3
-    .select('body')
-    .append('div')
-    .attr('id', 'container')
-    .style('position', 'absolute')
-    .style('top', '50%')
-    .style('left', '50%')
-    .style('transform', 'translate(-50%, -50%)')
-    .style('width', `${svgWidth}px`)
-    .style('height', `${svgHeight}px`)
-    .style('box-shadow', '0 0 5px gray')
-    .style('background-color', 'white');
+const svgWidth = 1000;
+const svgHeight = 500;
+const svgPadding = 60;
+const svgPaddingTop = 90;
 
-  const title = d3
-    .select('#container')
-    .append('h1')
-    .attr('id', 'title')
-    .text('Doping in Professional Bicycle Racing')
-    .style('position', 'absolute')
-    .style('top', '25px')
-    .style('left', `${svgWidth / 2}px`)
-    .style('transform', 'translate(-50%, -50%)')
-    .style('width', '100%')
-    .style('text-align', 'center');
+d3.select('#container')
+  .style('width', `${svgWidth}px`)
+  .style('height', `${svgHeight}px`);
 
+d3.select('#title').style('left', `${svgWidth / 2}px`);
+
+// Dataset
+d3.json(dataURL).then(dataset => visualize(dataset));
+
+const visualize = dataset => {
+  // SVG
   const svg = d3
     .select('#container')
     .append('svg')
     .attr('class', 'svg-container')
     .attr('width', svgWidth)
-    .attr('height', svgHeight)
-    .style('background-color', 'white');
+    .attr('height', svgHeight);
 
   // X-AXIS
   const years = dataset.map(d => new Date(d.Year, 0));
 
-  const years2 = dataset
+  const yearsSorted = dataset
     .map(d => d.Year)
     .filter((x, i, s) => s.indexOf(x) === i)
     .sort((a, b) => a - b);
 
   const xScale = d3
     .scaleTime()
-    // .domain([d3.min(years), d3.max(years)])
     .domain([
-      new Date(years2[0] - 1, 0),
-      new Date(years2[years2.length - 1] + 1, 0)
+      new Date(yearsSorted[0] - 1, 0),
+      new Date(yearsSorted[yearsSorted.length - 1] + 1, 0)
     ])
     .range([svgPadding, svgWidth - svgPadding]);
 
@@ -73,8 +57,6 @@ d3.json(
     return theDate;
   });
 
-  const timeFormat = d3.timeFormat('%M:%S');
-
   const yScale = d3
     .scaleTime()
     .domain([d3.min(times), d3.max(times)])
@@ -83,7 +65,7 @@ d3.json(
   const yAxis = d3
     .axisLeft()
     .scale(yScale)
-    .tickFormat(timeFormat);
+    .tickFormat(d3.timeFormat('%M:%S'));
 
   svg
     .append('g')
@@ -92,29 +74,7 @@ d3.json(
     .call(yAxis);
 
   // Tooltip
-  const tooltip = d3
-    .select('#container')
-    .append('p')
-    .html('')
-    .attr('id', 'tooltip')
-    .style('position', 'absolute')
-    .style('transform', 'translate(-50%, -50%)')
-    .style('pointer-events', 'none');
-
-  // Legend
-  const legend = d3
-    .select('#container')
-    .append('p')
-    .html(
-      `<span class="green">No doping allegation</span>
-       <span class="red">With doping allegation</span>`
-    )
-    .attr('id', 'legend')
-    .style('position', 'absolute')
-    .style('top', '60px')
-    .style('left', '50%')
-    .style('transform', 'translate(-50%, -50%)')
-    .style('pointer-events', 'none');
+  const tooltip = d3.select('#tooltip');
 
   // CIRCLES
   svg
@@ -124,7 +84,6 @@ d3.json(
     .append('circle')
     .attr('class', 'dot')
     .attr('data-xvalue', d => d.Year)
-    // .attr('data-yvalue', d => d.Time)
     .attr('data-yvalue', (d, i) => times[i])
     .attr('cx', (d, i) => xScale(years[i]))
     .attr('cy', (d, i) => yScale(times[i]))
@@ -140,9 +99,9 @@ d3.json(
         .attr('data-year', d.Year)
         .style('top', `${yScale(times[i]) - 40}px`)
         .style('left', `${xScale(years[i])}px`)
-        .style('opacity', 1);
+        .style('visibility', 'visible');
     })
     .on('mouseout', () => {
-      tooltip.style('opacity', 0);
+      tooltip.style('visibility', 'hidden');
     });
-});
+};
