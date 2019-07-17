@@ -12,18 +12,18 @@ d3.select('#container')
 
 d3.select('#title').style('left', `${svgWidth / 2}px`);
 
+// SVG
+const svg = d3
+  .select('#container')
+  .append('svg')
+  .attr('class', 'svg-container')
+  .attr('width', svgWidth)
+  .attr('height', svgHeight);
+
 // Dataset
 d3.json(dataURL).then(dataset => visualize(dataset));
 
 const visualize = dataset => {
-  // SVG
-  const svg = d3
-    .select('#container')
-    .append('svg')
-    .attr('class', 'svg-container')
-    .attr('width', svgWidth)
-    .attr('height', svgHeight);
-
   // X-AXIS
   const years = dataset.map(d => new Date(d.Year, 0));
 
